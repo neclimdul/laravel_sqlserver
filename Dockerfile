@@ -10,12 +10,7 @@ RUN apk -U upgrade && apk add $buildDeps \
           libltdl \
           gmp \
           freetds \
-  && docker-php-ext-install iconv mbstring mysqli pdo pdo_mysql pdo_dblib gmp \
-  && docker-php-ext-enable gmp \
-  && docker-php-ext-enable pdo_dblib \
-  && docker-php-ext-enable opcache \
-  && pecl install apcu \
-  && docker-php-ext-enable apcu \
+  && docker-php-ext-install iconv mbstring pdo pdo_dblib gmp \
   && apk del $buildDeps \
   && rm -rf /tmp/* \
   && rm -rf /var/cache/apk/*
