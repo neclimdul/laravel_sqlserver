@@ -1,5 +1,6 @@
 Run the following commands:
 ```
+cp .env.example .env
 composer install
 docker-compose up
 ```
