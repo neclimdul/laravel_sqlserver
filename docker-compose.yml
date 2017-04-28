@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    networks:
+      - development
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Expose local folder to nginx to serve static bits.
+      - ./:/var/www/html/:ro
+      # Expose configuration to nginx.
+      - ./resources/nginx/:/etc/nginx/conf.d/:ro
+    links:
+      - fpm
+  fpm:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - development
+    volumes:
+      - ./:/var/www/html/:rw
+    entrypoint:
+      - /var/www/html/resources/scripts/fpm-entrypoint.sh
+    links:
+      - db
+  db:
+    image: microsoft/mssql-server-linux
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=isheeChaiv5osh1aighi
+    networks:
+      - development
+    volumes:
+      # Expose our entrypoint script.
+      - ./:/var/www/html/:ro
+    entrypoint:
+      - /var/www/html/resources/scripts/sqlsrv-entrypoint.sh
+networks:
+  development:
+
